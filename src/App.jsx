@@ -1,10 +1,18 @@
 import React from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import AdminDashboard from './Pages/AdminDashBord.jsx';
 const App = () => {
   return (
-    <div className='bg-red-100'>
-      hello 
-    </div>
+    <BrowserRouter>
+      <Routes>
+
+        
+        <Route path="/admin" element={<AdminDashboard/>} />
+       
+
+      </Routes>
+    </BrowserRouter>
   )
 }
 
