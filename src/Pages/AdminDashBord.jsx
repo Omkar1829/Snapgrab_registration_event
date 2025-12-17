@@ -1,34 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, X, Trash2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
+import React, { useState, useEffect } from "react";
+import { Plus, X, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function AdminDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [events, setEvents] = useState([]);
-      const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const [eventData, setEventData] = useState({
     CreatedON: new Date().toISOString(),
-    Name: '',
-    Password: '',
-    Location: '',
-    role: 'Admin',
+    Name: "",
+    Id: "",  
+    Password: "",
+    Location: "",
+    Role: "Admin",
   });
 
-  const handleDelete = (e, index) => {
+  const handleDelete = async (e, event) => {
     e.stopPropagation();
-    const updatedEvents = events.filter((_, i) => i !== index);
-    setEvents(updatedEvents);
+    console.log(event, "this is event details");
+
+    if (!event.ID) {
+      console.error("Event ID missing", event);
+      return;
+    }
+
+    try {
+      await axios.delete(`http://192.168.0.66:3070/api/events/${event.ID}`);
+
+      setEvents((prev) => 
+        prev.filter((item) => item.ID !== event.ID));
+    } catch (err) {
+      console.error("Delete event failed:", err);
+    }
   };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (type === 'checkbox') {
+    if (type === "checkbox") {
       setEventData((prev) => ({
-        ...prev
+        ...prev,
       }));
     } else {
       setEventData((prev) => ({
@@ -38,78 +51,74 @@ export default function AdminDashboard() {
     }
   };
 
- const handleSubmit = async () => {
+  const handleSubmit = async () => {
   if (!eventData.Name || !eventData.Password) return;
 
   const payload = {
     Name: eventData.Name,
-    EventId: "EVT07",               // default
+    EventId: eventData.Id,
     Password: eventData.Password,
     Location: eventData.Location,
-    Role: eventData.role,
+    Role: eventData.Role,
   };
 
   try {
-    const res = await fetch("http://192.168.0.66:3070/api/events/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const res = await axios.post(
+      "http://192.168.0.66:3070/api/events/",
+      payload
+    );
 
-    if (!res.ok) {
-      throw new Error("Event creation failed");
-    }
+    const savedEvent = res.data;
 
-    const savedEvent = await res.json();
-
-    
     setEvents((prev) => [...prev, savedEvent]);
-
-   
-
     setShowModal(false);
-  } catch (error) {
-    console.error("Create event error:", error);
+    setEventData({
+      CreatedON: new Date().toISOString(),
+      Name: "",
+      Password: "",
+      Location: "",
+      Role: "Admin",
+    });
+    navigate('/admin');
+
+  } catch (err) {
+    console.error("Create event failed:", err.response || err.message);
   }
 };
-
 
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch('http://192.168.0.66:3070/api/events/');
+        const res = await fetch("http://192.168.0.66:3070/api/events/");
         const data = await res.json();
         setEvents(data);
       } catch (error) {
-        console.error('Error fetching events:', error);
+        console.error("Error fetching events:", error);
       }
     };
 
     fetchEvents();
   }, []);
 
+  const displayRole = (Role) => {
+    if (!Role) return "None selected";
 
-  const displayRole = (role) => {
-    if (!role) return 'None selected';
-    
-    
-    if (typeof role === 'string') {
-      return role.charAt(0).toUpperCase() + role.slice(1);
+    if (typeof Role === "string") {
+      return Role.charAt(0).toUpperCase() + Role.slice(1);
     }
-    
-    
-    if (typeof role === 'object') {
-      const selectedRoles = Object.keys(role)
-        .filter((key) => role[key])
+
+    if (typeof Role === "object") {
+      const selectedRoles = Object.keys(Role)
+        .filter((key) => Role[key])
         .map((key) => key.charAt(0).toUpperCase() + key.slice(1));
-      
-      return selectedRoles.length > 0 ? selectedRoles.join(', ') : 'None selected';
+
+      return selectedRoles.length > 0
+        ? selectedRoles.join(", ")
+        : "None selected";
     }
-    
-    return 'None selected';
+
+    return "None selected";
   };
 
   return (
@@ -137,11 +146,11 @@ export default function AdminDashboard() {
           {events.map((event, index) => (
             <div
               key={index}
-               onClick={() => navigate("/EventSettings/${Id}")}
+              onClick={() => navigate("/EventSettings", { state: event })} 
               className="relative bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
             >
               <button
-                onClick={(e) => handleDelete(e, index)}
+                onClick={(e) => handleDelete(e, event)}
                 className="absolute top-3 right-3 text-red-600 hover:text-red-800"
               >
                 <Trash2 size={18} />
@@ -152,14 +161,16 @@ export default function AdminDashboard() {
               </h3>
 
               <p className="text-gray-600 mb-1">
-                <span className="font-medium">Location:</span>{' '}
-                {event.Location || 'Not specified'}
+                <span className="font-medium">Location:</span>{" "}
+                {event.Location || "Not specified"}
               </p>
 
               <div className="mt-3">
-                <span className="text-sm font-medium text-gray-700">Role: </span>
+                <span className="text-sm font-medium text-gray-700">
+                  Role:{" "}
+                </span>
                 <span className="text-sm text-indigo-600 font-medium">
-                  {displayRole(event.Role || event.role)}
+                  {displayRole( event.Role)}
                 </span>
               </div>
             </div>
@@ -197,6 +208,20 @@ export default function AdminDashboard() {
                     placeholder="Enter event name"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    EventID
+                  </label>
+                  <input
+                    type="text"
+                    name="Id"
+                    value={eventData.Id} 
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Enter event ID"
+                  />
+                </div>
+
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
