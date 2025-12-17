@@ -1,14 +1,17 @@
 import React from 'react'
-import { Store, Calendar, Camera, LogOut, Users, UserCheck, Clock, Ticket } from 'lucide-react';
+import { Store, Calendar, Camera, LogOut, Users, UserCheck, Clock, Ticket, Zap, SwitchCamera } from 'lucide-react';
+import Webcam from "react-webcam";
+import { useRef, useState } from "react";
+import Header from './Header';
+
 
 
 const Event = () => {
 
-    // const cards = [
-    //     { id: 1, title: "VIP Registration" },
-    //     { id: 2, title: "Standard Registration " },
-    //     { id: 3, title: "Normal Registration" },
-    // ];
+    const webcamRef = useRef(null);
+    const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const [hoveredCard, setHoveredCard] = useState(null);
+
 
     const stats = [
         {
@@ -47,73 +50,73 @@ const Event = () => {
 
     const registrationTypes = [
         {
-            id: 'vip',
+            id: '1',
             title: 'VIP Registration',
             icon: Ticket,
             color: 'from-purple-500 to-indigo-600',
         },
         {
-            id: 'standard',
+            id: '2',
             title: 'Standard Registration',
             icon: Users,
             color: 'from-blue-500 to-cyan-600',
         },
         {
-            id: 'normal',
+            id: '3',
             title: 'Normal Registration',
             icon: Calendar,
             color: 'from-emerald-500 to-teal-600',
         },
         {
-            id: 'normal',
+            id: '4',
             title: 'Booth 1',
             icon: Calendar,
             color: 'from-purple-500 to-indigo-600',
         },
         {
-            id: 'normal',
+            id: '5',
             title: 'Booth 2',
             icon: Calendar,
             color: 'from-emerald-500 to-teal-600',
         },
         {
-            id: 'normal',
+            id: '6',
             title: 'Booth 3',
             icon: Calendar,
             color: 'from-blue-500 to-cyan-600',
         },
         {
-            id: 'normal',
+            id: '7',
             title: 'Booth 1',
             icon: Calendar,
             color: 'from-purple-500 to-indigo-600',
         },
         {
-            id: 'normal',
+            id: '8',
             title: 'Booth 2',
             icon: Calendar,
             color: 'from-emerald-500 to-teal-600',
         },
         {
-            id: 'normal',
+            id: '9',
             title: 'Booth 3',
             icon: Calendar,
             color: 'from-blue-500 to-cyan-600',
         },
         {
-            id: 'normal',
+            id: '10',
             title: 'Booth 1',
             icon: Calendar,
             color: 'from-purple-500 to-indigo-600',
         },
         {
-            id: 'normal',
+            id: '11',
             title: 'Booth 2',
             icon: Calendar,
             color: 'from-emerald-500 to-teal-600',
         },
         {
-            id: 'normal',
+            id: '12',
             title: 'Booth 3',
             icon: Calendar,
             color: 'from-blue-500 to-cyan-600',
@@ -121,77 +124,74 @@ const Event = () => {
 
     ];
 
+    const handleCameraOpen = () => {
+        setIsCameraOpen(false)
+        console.log("ashish")
+    }
+
     return (
         <>
-            <header className="bg-white border-b border-slate-200 shadow-sm">
-                <div className="w-full mx-auto px-6 py-4 flex justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <Calendar className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-bold text-slate-800">
-                                EventRegister<span className="text-indigo-600">.in</span>
-                            </h1>
-                            <p className="text-sm text-slate-500">Admin Dashboard</p>
-                        </div>
-                    </div>
-
-
-                    <div className='flex items-center gap-4'>
-                        <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium border-none cursor-pointer flex items-center gap-2 hover:bg-indigo-700 transition-colors">
-                            <Store className="w-4 h-4" />
-                            Booth Visits
-                        </button>
-                        <button className='cursor-pointer' onClick={() => navigate('cam')}>
-                            <Camera />
-                        </button>
-                        <button className='cursor-pointer'>
-                            <LogOut />
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-
-
-            {/* <div className='grid grid-cols-3 md:grid-cols-3 mt-10 translate-x-28'>
-                {cards.map((item) => ( 
-                <div key={item.id} className='w-full md:w-44 h-40 bg-white shadow-lg flex items-center justify-center rounded-lg truncate'>
-                    <span className='text-lg'> 
-                        {item.title}
-                    </span>
-                </div>
-                ))}
-            </div> */}
+           <Header/>
 
             <main className="max-w-7xl mx-auto px-6 pb-12">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-                    {registrationTypes.map((type) => {
-                        const Icon = type.icon;
-                        return (
-                            <div
-                                key={type.id}
-                                onMouseEnter={() => setHoveredCard(type.id)}
-                                onMouseLeave={() => setHoveredCard(null)}
-                                className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-2"
-                            >
 
-                                <div className={`absolute inset-0 bg-gradient-to-br ${type.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                                <div className="relative p-6">
-                                    <div className={`w-16 h-16 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center shadow-lg mb-4 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
-                                        <Icon className="w-8 h-8 text-white" />
+                {isCameraOpen ? (
+                    // Camera modal
+                    <div className='flex justify-center mt-20'>
+                        <div className=" p-4 w-[90%] max-w-md relative">
+
+                            <Webcam
+                                ref={webcamRef}
+                                audio={false}
+                                mirrored
+                                screenshotFormat="image/jpeg"
+                                videoConstraints={{ facingMode: "user" }}
+                                className="w-full rounded-lg "
+                            />
+                             <span className='bg-white/50 px-2 py-2 absolute bottom-6 left-5 hover:bg-yellow-300 flex justify-center items-center ml-1 rounded-full cursor-pointer'><Zap size={24}/></span>
+                             <span className='bg-white/50 px-2 py-2 absolute bottom-6 right-5 hover:bg-yellow-300 flex justify-center items-center ml-1 rounded-full cursor-pointer'> <SwitchCamera /></span>
+                               
+                            <button
+                                onClick={() => setIsCameraOpen(false)}
+                                className="w-2/3 px-52 py-1 bg-red-500 text-white rounded-sm font-medium hover:bg-red-600 transition cursor-pointer mt-3 absolute flex justify-center items-center'
+                                "
+                            >
+                                Exit
+                            </button>
+
+                        </div>
+                    </div>
+
+                ) : (
+                    // Registration
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                        {registrationTypes.map((type) => {
+                            const Icon = type.icon;
+                            return (
+                                <div
+                                    key={type.id}
+                                    onClick={() => setIsCameraOpen(true)}
+                                    className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-2"
+                                >
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${type.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+
+                                    <div className="relative p-6">
+                                        <div className={`w-16 h-16 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center shadow-lg mb-4 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
+                                            <Icon className="w-8 h-8 text-white" />
+                                        </div>
+
+                                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                            {type.title}
+                                        </h3>
                                     </div>
 
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                        {type.title}
-                                    </h3>
+                                    <div className={`absolute -right-8 -bottom-8 w-32 h-32 bg-gradient-to-br ${type.color} rounded-full opacity-10 transform group-hover:scale-150 transition-transform duration-500`} />
                                 </div>
-                                <div className={`absolute -right-8 -bottom-8 w-32 h-32 bg-gradient-to-br ${type.color} rounded-full opacity-10 transform group-hover:scale-150 transition-transform duration-500`} />
-                            </div>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
             </main>
         </>
     )

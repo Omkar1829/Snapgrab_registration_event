@@ -7,6 +7,9 @@ import {
     ModuleRegistry,
     PieSeriesModule,
 } from "ag-charts-community";
+import Header from './Header';
+
+
 
 ModuleRegistry.registerModules([LegendModule, PieSeriesModule]);
 
@@ -93,36 +96,8 @@ const EventDashboard = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-            {/* Header */}
-            <header className="bg-white border-b border-slate-200 shadow-sm">
-                <div className="w-full mx-auto px-6 py-4 flex justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <Calendar className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-bold text-slate-800">
-                                EventRegister<span className="text-indigo-600">.in</span>
-                            </h1>
-                            <p className="text-sm text-slate-500">Admin Dashboard</p>
-                        </div>
-                    </div>
 
-
-                    <div className='flex items-center gap-4'>
-                        <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium border-none cursor-pointer flex items-center gap-2 hover:bg-indigo-700 transition-colors">
-                            <Store className="w-4 h-4" />
-                            Booth Visits
-                        </button>
-                        <button className='cursor-pointer' onClick={() => navigate('cam')}>
-                            <Camera />
-                        </button>
-                        <button className='cursor-pointer'>
-                            <LogOut />
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <Header/>
 
             <div className="max-w-7xl mx-auto px-6 py-8">
                 {/* Stats Grid */}

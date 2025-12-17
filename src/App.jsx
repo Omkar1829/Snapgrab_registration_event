@@ -4,13 +4,16 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Event from './components/Event.jsx'
 
 import AdminDashboard from './Pages/AdminDashBord.jsx';
+import Registrationform from './components/Registrationform.jsx';
+
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Userdashboard />} />
-          <Route path='cam' element={<Event />} />
+          <Route path='/cam' element={<Event />} />
+          <Route path='/form' element={<Registrationform />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
