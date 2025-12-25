@@ -19,9 +19,12 @@ const App = () => {
           <Route path="/dashboard" element={<Userdashboard />} />
           <Route path='/cam' element={<Event />} />
           <Route path='/form' element={<Registrationform />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/User" element={<Userlogs />} />
           <Route path="/Booth" element={<Boothvisits />} />
+          <Route path="/User" element={<Userlogs />} />
+
+
+          {/* ----------------Admin Routes---------------- */}
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path='/EventSettings/*' element={<EventSettings  />} />
 
 
