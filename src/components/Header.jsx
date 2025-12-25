@@ -8,6 +8,21 @@ import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
 
+
+
+    const handleLogout = () => {
+        const enterpassword = window.prompt("Please enter password to continue")
+
+        if (!enterpassword) return
+
+        if (enterpassword === "Ashish") {
+            navigate("/")
+        } else {
+            alert("Enter correct password")
+        }
+
+    }
+
     const [openSidebar, setOpenSidebar] = useState(false);
     const navigate = useNavigate();
 
@@ -38,23 +53,24 @@ const Header = () => {
                         <h2 className="text-xl font-semibold mb-4">Menu</h2>
 
                         <Menu className="flex flex-col gap-2">
+                             <MenuItem onClick={() => navigate('/dashboard')}> Dashboard </MenuItem>
                             <MenuItem onClick={() => navigate('/cam')}> Camera </MenuItem>
-                            <MenuItem> Logout </MenuItem>
-                            <MenuItem> Booth Visits </MenuItem>
-                            <MenuItem> Users Logs </MenuItem>
+                            <MenuItem onClick={handleLogout}> Logout </MenuItem>
+                            <MenuItem onClick={() => navigate('/Booth')}> Booth Visits </MenuItem>
+                            <MenuItem onClick={() => navigate('/User')}> Registered Users</MenuItem>
                             <MenuItem onClick={() => navigate('/form')}> Registration </MenuItem>
                         </Menu>
                     </div>
 
                     <div>
-                        <h1 className="text-2xl font-bold text-slate-800 cursor-pointer" onClick={() => {navigate ("/")}}>
+                        <h1 className="text-2xl font-bold text-slate-800 cursor-pointer" onClick={() => { navigate("/dashboard") }}>
                             EventRegister<span className="text-indigo-600 cursor-pointer">.in</span>
                         </h1>
                         {/* <p className="text-sm text-slate-500">Admin Dashboard</p> */}
                     </div>
                 </div>
 
-                    {/* <div className='flex items-center gap-4'>
+                {/* <div className='flex items-center gap-4'>
                         <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium border-none cursor-pointer flex items-center gap-2 hover:bg-indigo-700 transition-colors">
                             <Store className="w-4 h-4" />
                             Booth Visits

@@ -5,20 +5,27 @@ import Event from './components/Event.jsx'
 
 import AdminDashboard from './Pages/AdminDashBord.jsx';
 import Registrationform from './components/Registrationform.jsx';
+import Userlogs from './components/Userlogs.jsx';
+import Login from './components/Login.jsx';
+import Boothvisits from './components/Boothvisits.jsx';
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Userdashboard />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Userdashboard />} />
           <Route path='/cam' element={<Event />} />
           <Route path='/form' element={<Registrationform />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/User" element={<Userlogs />} />
+          <Route path="/Booth" element={<Boothvisits />} />
         </Routes>
       </BrowserRouter>
 
-    </>)
+    </>
+    )
 }
 
 export default App
