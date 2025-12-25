@@ -3,12 +3,13 @@ import { Users, UserCheck, Store, Clock, TrendingUp, MapPin, Calendar, Download,
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 
 
 const Header = () => {
 
-
+    const { Role} = jwtDecode(localStorage.getItem("token"));
 
     const handleLogout = () => {
         const enterpassword = window.prompt("Please enter password to continue")
@@ -16,11 +17,32 @@ const Header = () => {
         if (!enterpassword) return
 
         if (enterpassword === "Ashish") {
+            localStorage.removeItem('token');
             navigate("/")
         } else {
             alert("Enter correct password")
         }
 
+    }
+
+    const MenuMap = {
+        admin: [
+            { name: 'Dashboard', path: '/dashboard'},
+            { name: 'Camera', path: '/cam' },
+            { name: 'Booth Visits', path: '/Booth' },
+            { name: 'Registered Users', path: '/User' },
+            { name: 'Registration', path: '/form' },
+            { name: 'Logout', action: handleLogout },
+        ],
+        checkin: [
+            { name: 'Camera', path: '/cam' },
+            { name: 'Logout', action: handleLogout },
+        ],
+        registration: [
+            { name: 'Registered Users', path: '/User' },
+            { name: 'Registration', path: '/form' },
+            { name: 'Logout', action: handleLogout },
+        ]
     }
 
     const [openSidebar, setOpenSidebar] = useState(false);
@@ -53,12 +75,19 @@ const Header = () => {
                         <h2 className="text-xl font-semibold mb-4">Menu</h2>
 
                         <Menu className="flex flex-col gap-2">
-                             <MenuItem onClick={() => navigate('/dashboard')}> Dashboard </MenuItem>
+                            {MenuMap[Role].map((item, index) => (
+                                item.path ? (
+                                    <MenuItem key={index} onClick={() => { navigate(item.path); setOpenSidebar(false); }}> {item.name} </MenuItem>
+                                ) : (
+                                    <MenuItem key={index} onClick={() => { item.action(); setOpenSidebar(false); }}> {item.name} </MenuItem>
+                                )
+                            ))}
+                            {/* <MenuItem onClick={() => navigate('/dashboard')}> Dashboard </MenuItem>
                             <MenuItem onClick={() => navigate('/cam')}> Camera </MenuItem>
                             <MenuItem onClick={handleLogout}> Logout </MenuItem>
                             <MenuItem onClick={() => navigate('/Booth')}> Booth Visits </MenuItem>
                             <MenuItem onClick={() => navigate('/User')}> Registered Users</MenuItem>
-                            <MenuItem onClick={() => navigate('/form')}> Registration </MenuItem>
+                            <MenuItem onClick={() => navigate('/form')}> Registration </MenuItem> */}
                         </Menu>
                     </div>
 
