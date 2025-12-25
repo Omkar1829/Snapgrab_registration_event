@@ -74,13 +74,13 @@ const App = () => {
           <Route element={<PublicOnlyRoute />}>
             <Route path="/" element={<Login />} />
           </Route>
-          
-          <Route element={<ProtectedRoute allowedRoles={["checkin"]} />}>
+
+          <Route element={<ProtectedRoute allowedRoles={["admin", "checkin"]} />}>
             <Route path="/cam" element={<Event />} />
             <Route path= '*' element= {<Boothvisits />} />
           </Route>
 
-          <Route element={<ProtectedRoute allowedRoles={["registration"]} />}>
+          <Route element={<ProtectedRoute allowedRoles={["admin", "registration"]} />}>
             <Route path='/form' element={<Registrationform />} />
             <Route path="/User" element={<Userlogs />} />
           </Route>

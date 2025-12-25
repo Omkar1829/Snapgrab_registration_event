@@ -1,75 +1,180 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Form, Input, Select } from 'antd';
-import config from './config'
-import Header from './Header';
+import React, { useState } from "react";
+import Header from "./Header";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import config from "./config";
+import { jwtDecode } from "jwt-decode";
 
+/* ================= VALIDATION SCHEMA ================= */
+const validationSchema = Yup.object({
+    firstName: Yup.string().required("Name is required"),
+    email: Yup.string()
+        .email("Invalid email")
+        .required("Email is required"),
+    employeeId: Yup.string(),
+    eventId: Yup.string().required("Event ID is required"),
+    type: Yup.string().required("Type is required"),
+});
 
 const Registrationform = () => {
+    const [disableBtn, setDisableBtn] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
 
-    const handeleSubmit = (values) => {
-        const { Username, Email, EmployeeID, EventID } = values.user.name;
-        if (Username === "Ashish" && Email === "ashish@123" && EmployeeID === "1111" && EventID === "10") {
-            console.log("Registration Sucessfull")
-        } else {
-            alert('invlaid Credentials')
-        }
-    }
+    /* ================= GET EVENT ID FROM TOKEN ================= */
+    const token = localStorage.getItem("token");
+    const eventId = token ? jwtDecode(token)?.EventId : "";
 
+    /* ================= FORMIK ================= */
+    const formik = useFormik({
+        initialValues: {
+            firstName: "",
+            email: "",
+            employeeId: "",
+            eventId: eventId,
+            type: "standard",
+        },
+        validationSchema,
+        onSubmit: async (values, { resetForm }) => {
+            try {
+                setDisableBtn(true);
 
-    const MyFormItemContext = React.createContext([]);
-    function toArr(str) {
-        return Array.isArray(str) ? str : [str];
-    }
+                await axios.post(
+                    `${config.apiUrl}/qrregistration/register`,
+                    {
+                        name: values.firstName,
+                        email: values.email,
+                        empid: values.employeeId,
+                        EventID: values.eventId,
+                        type: values.type,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
 
-    const MyFormItemGroup = ({ prefix, children }) => {
-        const prefixPath = React.useContext(MyFormItemContext);
-        const concatPath = React.useMemo(() => [...prefixPath, ...toArr(prefix)], [prefixPath, prefix]);
-        return <MyFormItemContext.Provider value={concatPath}>{children}</MyFormItemContext.Provider>;
-    };
+                
 
-    const MyFormItem = ({ name, ...props }) => {
-        const prefixPath = React.useContext(MyFormItemContext);
-        const concatName = name !== undefined ? [...prefixPath, ...toArr(name)] : undefined;
-        return <Form.Item name={concatName} {...props} />;
-    };
+                setSuccessMsg("Registration Successful!");
+                if (successMsg){
+                    alert('Registration Successful!')
+                }
+                resetForm();
+            } catch (error) {
+                alert("Registration Failed");
+                console.error(error);
+            } finally {
+                setDisableBtn(false);
+            }
+        },
+    });
 
-    const onFinish = value => {
-        console.log(value);
-    };
+    const { values, errors, touched, handleChange, handleSubmit } = formik;
+
     return (
         <>
             <Header />
-            <div className='flex justify-center mt-5'>
-                <div className=' w-1/2 h-auto bg-white shadow-2xl rounded-lg p-10 '>
-                    <Form name="form_item_path" layout="vertical" onFinish={handeleSubmit}>
-                        <MyFormItemGroup prefix={['user']}>
-                            <MyFormItemGroup prefix={['name']}>
-                                <MyFormItem name="Username" label="First Name" >
-                                    <Input />
-                                </MyFormItem>
-                                <MyFormItem name="Email" label="Email" >
-                                    <Input />
-                                </MyFormItem>
-                                <MyFormItem name="EmployeeID" label="Employee ID" >
-                                    <Input />
-                                </MyFormItem>
-                                <MyFormItem name="EventID" label="Event ID" >
-                                    <Input />
-                                </MyFormItem>
-                            </MyFormItemGroup>
-                            <MyFormItem name="Type" label="Type">
-                                <Select />
-                            </MyFormItem>
-                        </MyFormItemGroup>
 
-                        <Button type="primary" htmlType="submit" >
-                            Submit
-                        </Button>
-                    </Form>
+            <div className=" gap-4">
+                <h1 className="text-4xl text-center my-8">Registration Form</h1>
+                <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-xl p-8">
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* NAME */}
+                        <div className="md:grid grid-cols-2 gap-4 ">
+                            <div >
+                                <label className="block text-sm text-gray-700 font-medium mb-1">First Name</label>
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    value={values.firstName}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                                />
+                                {errors.firstName && touched.firstName && (
+                                    <p className="text-red-500 text-sm">{errors.firstName}</p>
+                                )}
+                            </div>
+
+                            {/* EMAIL */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                                />
+                                {errors.email && touched.email && (
+                                    <p className="text-red-500 text-sm">{errors.email}</p>
+                                )}
+                            </div>
+
+                            {/* EMPLOYEE ID */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Employee ID</label>
+                                <input
+                                    type="text"
+                                    name="employeeId"
+                                    value={values.employeeId}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                                />
+                            </div>
+
+                            {/* EVENT ID */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Event ID</label>
+                                <input
+                                    type="text"
+                                    name="eventId"
+                                    value={values.eventId}
+                                    readOnly
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                                />
+                            </div>
+                        </div>
+
+                        {/* TYPE */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Registration Type
+                            </label>
+                            <select
+                                name="type"
+                                value={values.type}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                            >
+                                <option value="standard">Standard</option>
+                                <option value="vip">VIP</option>
+                            </select>
+                        </div>
+
+
+                        {/* SUBMIT */}
+                        <button
+                            type="submit"
+                            disabled={disableBtn}
+                            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold cursor-pointer"
+                        >
+                            {disableBtn ? "Submitting..." : "Register"}
+                        </button>
+
+                        {successMsg && (
+                            <p className="text-green-600 text-center font-semibold">
+                                {successMsg}
+                            </p>
+                        )}
+                    </form>
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Registrationform
+export default Registrationform;
