@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Userdashboard from './components/Userdashboard'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Event from './components/Event.jsx'
@@ -12,6 +12,16 @@ import { jwtDecode } from "jwt-decode";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const App = () => {
+
+  const [token, setToken] = useState(localStorage.getItem("token"))
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setToken(localStorage.getItem("token"))
+    }
+    window.addEventListener("storage", handleStorage)
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [])
 
   const tokenSource = () => localStorage.getItem("token");
 
@@ -72,15 +82,15 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route element={<PublicOnlyRoute />}>
-            <Route path="/" element={<Login />} />
-          </Route>
-          
-          <Route element={<ProtectedRoute allowedRoles={["checkin"]} />}>
-            <Route path="/cam" element={<Event />} />
-            <Route path= '*' element= {<Boothvisits />} />
+            <Route path="/" element={<Login setToken={setToken} />} />
           </Route>
 
-          <Route element={<ProtectedRoute allowedRoles={["registration"]} />}>
+          <Route element={<ProtectedRoute allowedRoles={["admin","checkin"]} />}>
+            <Route path="/cam" element={<Event />} />
+            <Route path='*' element={<Boothvisits />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={["admin","registration"]} />}>
             <Route path='/form' element={<Registrationform />} />
             <Route path="/User" element={<Userlogs />} />
           </Route>
