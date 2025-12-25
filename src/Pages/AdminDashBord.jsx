@@ -94,7 +94,7 @@ const handleInputChange = (e) => {
     };
 
     fetchEvents();
-  }, []);
+  }, [events]);
 
   const displayRole = (Role) => {
     if (!Role) return "None selected";
@@ -137,40 +137,66 @@ const handleInputChange = (e) => {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map((event, index) => (
-            <div
-              key={index}
-              onClick={() => navigate("/EventSettings", { state: event })} 
-              className="relative bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-            >
-              <button
-                onClick={(e) => handleDelete(e, event)}
-                className="absolute top-3 right-3 text-red-600 hover:text-red-800"
-              >
-                <Trash2 size={18} />
-              </button>
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {events.map((event, index) => (
+    <div
+      key={index}
+      onClick={() => navigate("/EventSettings", { state: event })}
+      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl 
+                 transition-all duration-300 overflow-hidden cursor-pointer 
+                 transform hover:-translate-y-2"
+    >
+      
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 
+                      opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
 
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {event.Name}
-              </h3>
+      
+      <button
+        onClick={(e) => handleDelete(e, event)}
+        className="absolute top-4 right-4 z-10 text-red-600 hover:text-red-800"
+      >
+        <Trash2 size={18} />
+      </button>
 
-              <p className="text-gray-600 mb-1">
-                <span className="font-medium">Location:</span>{" "}
-                {event.Location || "Not specified"}
-              </p>
-
-              <div className="mt-3">
-                <span className="text-sm font-medium text-gray-700">
-                  Role:{" "}
-                </span>
-                <span className="text-sm text-indigo-600 font-medium">
-                  {displayRole( event.Role)}
-                </span>
-              </div>
-            </div>
-          ))}
+      <div className="relative p-6">
+        
+        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 
+                        rounded-2xl flex items-center justify-center shadow-lg mb-4 
+                        transform group-hover:scale-110 group-hover:rotate-3 
+                        transition-transform duration-300">
+          <span className="text-white font-bold text-xl">
+            {event.Name?.charAt(0)}
+          </span>
         </div>
+
+        <h3 className="text-xl font-bold text-gray-900 mb-2">
+          {event.Name}
+        </h3>
+
+        <p className="text-gray-600 mb-1">
+          <span className="font-medium">Location:</span>{" "}
+          {event.Location || "Not specified"}
+        </p>
+
+        <div className="mt-3">
+          <span className="text-sm font-medium text-gray-700">
+            Role:
+          </span>{" "}
+          <span className="text-sm text-indigo-600 font-semibold">
+            {displayRole(event.Role)}
+          </span>
+        </div>
+      </div>
+
+      
+      <div className="absolute -right-8 -bottom-8 w-32 h-32 
+                      bg-gradient-to-br from-indigo-500 to-purple-600 
+                      rounded-full opacity-10 transform group-hover:scale-150 
+                      transition-transform duration-500" />
+    </div>
+  ))}
+</div>
+
       </div>
 
       {showModal && (
