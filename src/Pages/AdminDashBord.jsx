@@ -36,20 +36,15 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
 
-    if (type === "checkbox") {
-      setEventData((prev) => ({
-        ...prev,
-      }));
-    } else {
-      setEventData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
+  setEventData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
 
   const handleSubmit = async () => {
   if (!eventData.Name || !eventData.Password) return;
@@ -77,7 +72,7 @@ export default function AdminDashboard() {
       Name: "",
       Password: "",
       Location: "",
-      Role: "Admin",
+      Role: "",
     });
     navigate('/admin');
 
@@ -250,6 +245,54 @@ export default function AdminDashboard() {
                     placeholder="Enter event location"
                   />
                 </div>
+
+                <div>
+  <label className="block text-sm font-medium text-gray-700 mb-3">
+    Select Role
+  </label>
+
+  <div className="flex flex-col sm:flex-row gap-3">
+    {/* Admin */}
+    <label className="flex items-center gap-2 cursor-pointer border rounded-lg px-4 py-2 hover:bg-gray-50">
+      <input
+        type="radio"
+        name="Role"
+        value="admin"
+        checked={eventData.Role === "admin"}
+        onChange={handleInputChange}
+        className="accent-indigo-600"
+      />
+      <span className="text-gray-700 font-medium">Admin</span>
+    </label>
+
+    {/* Registration */}
+    <label className="flex items-center gap-2 cursor-pointer border rounded-lg px-4 py-2 hover:bg-gray-50">
+      <input
+        type="radio"
+        name="Role"
+        value="registration"
+        checked={eventData.Role === "registration"}
+        onChange={handleInputChange}
+        className="accent-indigo-600"
+      />
+      <span className="text-gray-700 font-medium">Registration</span>
+    </label>
+
+    {/* Check In */}
+    <label className="flex items-center gap-2 cursor-pointer border rounded-lg px-4 py-2 hover:bg-gray-50">
+      <input
+        type="radio"
+        name="Role"
+        value="checkin"
+        checked={eventData.Role === "checkin"}
+        onChange={handleInputChange}
+        className="accent-indigo-600"
+      />
+      <span className="text-gray-700 font-medium">Check In</span>
+    </label>
+  </div>
+</div>
+
               </div>
             </div>
 
