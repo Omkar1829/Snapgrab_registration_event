@@ -5,38 +5,57 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode';
 
-const Login = () => {
+
+const Login = ({ setToken }) => {
 
     const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [Password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
-    
+
 
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
         if (username === "Snapgrab@admin" && Password === "Snapgrab@2025") {
             navigate("/admin")
-        } else {
-            try {
+            return
+        }
 
-                const response = await axios.post(`${config.apiUrl}/admin/login`, {
-                    name: username,
-                    password: Password,
-                })
-                if (response.data.status === 200) {
-                    const token = response.data.token
-                    localStorage.setItem('token', token)
-                    navigate('/')
-                }
+        try {
+            const response = await axios.post(`${config.apiUrl}/admin/login`, {
+                name: username,
+                password: Password,
+            }) 
+            
+            if (response.status === 200 && response.data.token) {
+                const token = response.data.token
 
-            } catch (e) {
+                localStorage.setItem("token", token)
+                setToken(token)
+
+                const { Role } = jwtDecode(token)
+                navigate(
+                    Role === "admin"
+                        ? "/dashboard"
+                        : Role === "checkin"
+                            ? "/cam"
+                            : "/User",
+                    { replace: true }
+                )
+            } else {
                 alert("Invalid Credentials")
             }
+
+        } catch (error) {
+            console.error("Login error:", error)
+            alert("Invalid Credentials")
         }
     }
+
 
 
     return (
