@@ -27,7 +27,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      await axios.delete(`http://192.168.0.66:3070/api/events/${event.ID}`);
+      await axios.delete(`http://192.168.1.106:3070/api/events/${event.ID}`);
 
       setEvents((prev) => 
         prev.filter((item) => item.ID !== event.ID));
@@ -59,7 +59,7 @@ const handleInputChange = (e) => {
 
   try {
     const res = await axios.post(
-      "http://192.168.0.66:3070/api/events/",
+      "http://192.168.1.106:3070/api/events/",
       payload
     );
 
@@ -85,7 +85,7 @@ const handleInputChange = (e) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://192.168.0.66:3070/api/events/");
+        const res = await fetch("http://192.168.1.106:3070/api/events/");
         const data = await res.json();
         setEvents(data);
       } catch (error) {

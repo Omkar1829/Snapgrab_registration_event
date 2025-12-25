@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+@media print {
+
+    /* Hide everything */
+    body * {
+        visibility: hidden !important;
+    }
+
+    /* Show only print area */
+    .print-area,
+    .print-area * {
+        visibility: visible !important;
+    }
+
+    /* 🔥 Custom page size: 9 x 13 inch */
+    @page {
+        size: 9in 13in;
+        margin: 0;
+    }
+
+    /* Full-page centering */
+    .print-area {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* QR container */
+    .qr-wrapper {
+        text-align: center;
+    }
+
+    /* ✅ QR SIZE (adjust safely) */
+    .qr-image {
+        width: 4in;
+        height: 4in;
+    }
+
+    .qr-title {
+        font-size: 24pt;
+        margin-bottom: 0.5in;
+    }
+
+    .qr-text {
+        margin-top: 0.3in;
+        font-size: 14pt;
+    }
+}

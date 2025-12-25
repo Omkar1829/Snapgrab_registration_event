@@ -4,13 +4,31 @@ import axios from "axios";
 import config from "./config";
 import { jwtDecode } from "jwt-decode";
 
+const PAGE_SIZE = 20;
+
 const Userlogs = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [eventId, setEventId] = useState("");
 
+  // pagination
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+
+  // QR / print
   const [showQR, setShowQR] = useState(false);
   const [selectedEmpID, setSelectedEmpID] = useState("");
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  /* ================= PRINT ================= */
+  const handlePrint = () => {
+    setIsPrinting(true);
+    setTimeout(() => {
+      window.print();
+      setIsPrinting(false);
+    }, 500);
+  };
 
   /* ================= GET EVENT ID ================= */
   useEffect(() => {
@@ -28,75 +46,101 @@ const Userlogs = () => {
         params: {
           term: search || undefined,
           eventId,
+          pageIndex,
+          pageSize: PAGE_SIZE,
         },
       });
-      setUsers(res.data.data.items || []);
+
+      const data = res.data.data;
+      setUsers(data.items || []);
+      setPageCount(data.pageCount || 0);
+      setTotalCount(data.totalCount || 0);
     } catch (err) {
       console.error("Fetch users error", err);
     }
   };
 
+  /* Reset page on search */
+  useEffect(() => {
+    setPageIndex(0);
+  }, [search]);
+
   useEffect(() => {
     if (eventId) fetchUsers();
-  }, [eventId, search]);
+  }, [eventId, search, pageIndex]);
+
+  const start = pageIndex * PAGE_SIZE + 1;
+  const end = Math.min((pageIndex + 1) * PAGE_SIZE, totalCount);
 
   return (
-    <div>
+    <div className="min-h-screen bg-slate-100">
       <Header />
 
-      <div className="w-full p-4 mx-auto mt-4">
+      <div className="max-w-7xl mx-auto p-4">
 
-        {/* SEARCH (UI UNCHANGED) */}
-        <div className="w-full flex justify-between items-center mb-3 mt-1">
-          <div className="w-full max-w-sm min-w-[200px] relative">
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-white w-full pr-11 h-10 pl-3 py-2 text-sm border border-slate-200 rounded focus:outline-none focus:border-slate-400"
-              placeholder="Search user..."
-            />
-          </div>
+        {/* ================= HEADER ================= */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+          <h1 className="text-2xl font-semibold text-slate-800">
+            User Logs
+          </h1>
+
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name, email, EmpID..."
+            className="w-full md:w-80 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 bg-white focus:ring-slate-400"
+          />
         </div>
 
-        {/* TABLE (UI UNCHANGED) */}
-        <div className="relative flex flex-col w-full overflow-x-auto bg-white shadow-md rounded-lg">
-          <table className="w-full text-left table-auto min-w-max">
-            <thead>
+        {/* ================= TABLE ================= */}
+        <div className="bg-white rounded-xl shadow overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 text-slate-600">
               <tr>
-                <th className="p-4 border-b bg-slate-50 text-sm text-slate-500">EmpID</th>
-                <th className="p-4 border-b bg-slate-50 text-sm text-slate-500">Name</th>
-                <th className="p-4 border-b bg-slate-50 text-sm text-slate-500">Email</th>
-                <th className="p-4 border-b bg-slate-50 text-sm text-slate-500">Type</th>
-                <th className="p-4 border-b bg-slate-50 text-sm text-slate-500">Checked In</th>
-                <th className="p-4 border-b bg-slate-50 text-sm text-slate-500">QR</th>
+                <th className="p-4 text-left">EmpID</th>
+                <th className="p-4 text-left">Name</th>
+                <th className="p-4 text-left">Email</th>
+                <th className="p-4 text-left">Type</th>
+                <th className="p-4 text-left">Checked In</th>
+                <th className="p-4 text-center">QR</th>
               </tr>
             </thead>
 
             <tbody>
               {users.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="p-4 text-center text-slate-500">
+                  <td colSpan="6" className="p-6 text-center text-slate-500">
                     No users found
                   </td>
                 </tr>
               )}
 
               {users.map((u) => (
-                <tr key={u.EmpID} className="hover:bg-slate-50 border-b">
-                  <td className="p-4 text-sm">{u.EmpID}</td>
-                  <td className="p-4 text-sm">{u.Name}</td>
-                  <td className="p-4 text-sm">{u.Email}</td>
-                  <td className="p-4 text-sm capitalize">{u.Type}</td>
-                  <td className="p-4 text-sm">
-                    {u.IsCheckedIn ? "Yes" : "No"}
+                <tr
+                  key={u.EmpID}
+                  className="border-t hover:bg-slate-50 transition"
+                >
+                  <td className="p-4 font-medium">{u.EmpID}</td>
+                  <td className="p-4">{u.Name}</td>
+                  <td className="p-4">{u.Email}</td>
+                  <td className="p-4 capitalize">{u.Type}</td>
+                  <td className="p-4">
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${u.IsCheckedIn
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                        }`}
+                    >
+                      {u.IsCheckedIn ? "Yes" : "No"}
+                    </span>
                   </td>
-                  <td className="p-4 text-sm">
+                  <td className="p-4 text-center">
                     <button
                       onClick={() => {
                         setSelectedEmpID(u.EmpID);
                         setShowQR(true);
                       }}
-                      className="px-3 py-1 border rounded hover:bg-slate-100 transition"
+                      className="px-3 py-1.5 border rounded-lg hover:bg-slate-100"
                     >
                       Show QR
                     </button>
@@ -105,51 +149,88 @@ const Userlogs = () => {
               ))}
             </tbody>
           </table>
+
+          {/* ================= PAGINATION ================= */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-4 border-t bg-slate-50">
+            <span className="text-sm text-slate-600">
+              Showing <strong>{start}</strong> – <strong>{end}</strong> of{" "}
+              <strong>{totalCount}</strong>
+            </span>
+
+            <div className="flex items-center gap-2">
+              <button
+                disabled={pageIndex === 0}
+                onClick={() => setPageIndex((p) => p - 1)}
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-50"
+              >
+                Prev
+              </button>
+
+              <span className="px-3 py-1.5 border rounded-lg bg-white text-sm">
+                Page {pageIndex + 1} of {pageCount}
+              </span>
+
+              <button
+                disabled={pageIndex + 1 >= pageCount}
+                onClick={() => setPageIndex((p) => p + 1)}
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ================= QR MODAL (TAILWIND) ================= */}
+      {/* ================= QR MODAL ================= */}
       {showQR && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg w-[90%] max-w-md p-6 relative">
+          <div className="bg-white rounded-xl w-[90%] max-w-md p-6 relative">
 
-            <button
-              onClick={() => setShowQR(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-black"
-            >
-              ✕
-            </button>
+            {!isPrinting && (
+              <>
 
-            <h2 className="text-lg font-semibold mb-4 text-center">
-              Employee QR
-            </h2>
+                <button
+                  onClick={() => setShowQR(false)}
+                  className="absolute top-3 right-3 text-gray-500 hover:text-black"
+                >
+                  ✕
+                </button>
 
-            <div className="flex flex-col items-center gap-3">
-              <img
-                src={`${config.apiUrl}/qr/EmpID/${selectedEmpID}`}
-                alt="QR"
-                className="w-48 h-48"
-              />
-              <p className="text-sm">
-                <strong>Employee ID:</strong> {selectedEmpID}
-              </p>
+                <h2 className="text-lg font-semibold text-center mb-4">
+                  Employee QR
+                </h2>
+              </>
+            )}
+            <div className="print-area">
+              <div className="flex flex-col items-center gap-3">
+                <img
+                  src={`${config.apiUrl}/qr/EmpID/${selectedEmpID}`}
+                  alt="QR"
+                  className="w-48 h-48"
+                />
+                <p className="text-sm">
+                  <strong>Employee ID:</strong> {selectedEmpID}
+                </p>
+              </div>
             </div>
 
-            <div className="flex justify-between mt-6">
-              <button
-                onClick={() => setShowQR(false)}
-                className="px-4 py-2 border rounded hover:bg-slate-100"
-              >
-                Close
-              </button>
-              <button
-                onClick={() => window.print()}
-                className="px-4 py-2 bg-slate-800 text-white rounded hover:bg-slate-700"
-              >
-                Print
-              </button>
-            </div>
-
+            {!isPrinting && (
+              <div className="flex justify-between mt-6">
+                <button
+                  onClick={() => setShowQR(false)}
+                  className="px-4 py-2 border rounded-lg hover:bg-slate-100"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={handlePrint}
+                  className="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700"
+                >
+                  Print
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

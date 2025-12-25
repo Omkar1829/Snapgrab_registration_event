@@ -122,7 +122,7 @@ const [selectedFile, setSelectedFile] = useState(null);
       try {
         console.log(selectedEvent, 'ID')
         const response = await axios.get(
-          `http://192.168.0.66:3070/api/activity?EventId=${selectedEvent.EventId}`
+          `http://192.168.1.106:3070/api/activity?EventId=${selectedEvent.EventId}`
         );
 
         setBooths(response.data.data); 
@@ -144,7 +144,7 @@ const [selectedFile, setSelectedFile] = useState(null);
         };
 
         const res = await axios.put(
-          `http://192.168.0.66:3070/api/events/${selectedEvent.ID}`,
+          `http://192.168.1.106:3070/api/events/${selectedEvent.ID}`,
           payload
         );
 
@@ -182,13 +182,13 @@ const [selectedFile, setSelectedFile] = useState(null);
 
   try {
     await axios.post(
-      "http://192.168.0.66:3070/api/activity/create",
+      "http://192.168.1.106:3070/api/activity/create",
       payload
     );
       console.log(selectedEvent, 'ID')
     
     const res = await axios.get(
-      `http://192.168.0.66:3070/api/activity?EventId=${selectedEvent.EventId}`
+      `http://192.168.1.106:3070/api/activity?EventId=${selectedEvent.EventId}`
     );
 
     setBooths(res.data.data);
@@ -206,7 +206,7 @@ const [selectedFile, setSelectedFile] = useState(null);
   if (window.confirm("Are you sure you want to delete this booth?")) {
     try {
       
-      await axios.delete(`http://192.168.0.66:3070/api/activity/${Id}`);
+      await axios.delete(`http://192.168.1.106:3070/api/activity/${Id}`);
 
       
       setBooths((prev) => prev.filter((booth) => booth.Id !== Id));
@@ -228,7 +228,7 @@ const handleCSVUpload = async () => {
 
   try {
    
-    await axios.post(`http://192.168.0.66:3070/api/qrregistration/bulk-upload?EventID=${selectedEvent.EventId}`, formData, {
+    await axios.post(`http://192.168.1.106:3070/api/qrregistration/bulk-upload?EventID=${selectedEvent.EventId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
@@ -244,7 +244,7 @@ const handleCSVUpload = async () => {
 const handleDownloadTemplate = async () => {
   try {
     
-    const response = await axios.get("http://192.168.0.66:3070/api/qrregistration/csv-template", {
+    const response = await axios.get("http://192.168.1.106:3070/api/qrregistration/csv-template", {
       responseType: 'blob', 
     });
 
