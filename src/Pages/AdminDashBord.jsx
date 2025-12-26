@@ -59,14 +59,7 @@ export default function AdminDashboard() {
   };
 
   try {
-<<<<<<< HEAD
-    const res = await axios.post(
-      "http://192.168.1.106:3070/api/events/",
-      payload
-    );
-=======
     await axios.post(`${config.apiUrl}/events`, payload);
->>>>>>> origin/Pratik-25-12-25
 
     await fetchEvents();
 
@@ -86,18 +79,6 @@ export default function AdminDashboard() {
 };
 
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const res = await fetch("http://192.168.1.106:3070/api/events/");
-        const data = await res.json();
-        setEvents(data);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-=======
  const fetchEvents = async () => {
   try {
     const res = await axios.get(`${config.apiUrl}/events`);
@@ -106,7 +87,6 @@ export default function AdminDashboard() {
     console.error("Error fetching events:", error);
   }
 };
->>>>>>> origin/Pratik-25-12-25
 
 
 useEffect(() => {

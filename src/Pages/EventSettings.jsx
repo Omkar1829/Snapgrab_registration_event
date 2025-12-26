@@ -159,23 +159,10 @@ const EventSettings = () => {
 
   const handleDeleteBooth = async (Id) => {
     try {
-<<<<<<< HEAD
-      
-      await axios.delete(`http://192.168.1.106:3070/api/activity/${Id}`);
-
-      
-      setBooths((prev) => prev.filter((booth) => booth.Id !== Id));
-      
-      alert("Booth deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting booth:", error);
-      alert("Failed to delete booth. Please try again.");
-=======
       await axios.delete(`${config.apiUrl}/activity/${Id}`);
       setBooths((prev) => prev.filter((b) => b.Id !== Id));
     } catch (err) {
       console.error("Delete failed", err);
->>>>>>> origin/Pratik-25-12-25
     }
   };
 
@@ -199,13 +186,6 @@ const EventSettings = () => {
         }
       );
 
-<<<<<<< HEAD
-  try {
-   
-    await axios.post(`http://192.168.1.106:3070/api/qrregistration/bulk-upload?EventID=${selectedEvent.EventId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-=======
       alert("CSV Uploaded Successfully!");
       setShowUploadModal(false);
       setSelectedFile(null);
@@ -214,7 +194,6 @@ const EventSettings = () => {
       alert("Failed to upload CSV. Please check the file format.");
     }
   };
->>>>>>> origin/Pratik-25-12-25
 
   const handleDownloadTemplate = async () => {
     try {
@@ -225,19 +204,10 @@ const EventSettings = () => {
         }
       );
 
-<<<<<<< HEAD
-const handleDownloadTemplate = async () => {
-  try {
-    
-    const response = await axios.get("http://192.168.1.106:3070/api/qrregistration/csv-template", {
-      responseType: 'blob', 
-    });
-=======
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", "attendee_template.csv");
->>>>>>> origin/Pratik-25-12-25
 
       document.body.appendChild(link);
       link.click();
