@@ -3,6 +3,7 @@ import { Calendar, Users, Ticket } from "lucide-react";
 import {jwtDecode} from "jwt-decode";
 import { CSVLink } from "react-csv";
 import Header from "./Header";
+import config from "./config";
 
 const iconMap = {
   VIP: Ticket,
@@ -24,7 +25,7 @@ const Boothvisits = () => {
     const fetchActivities = async () => {
       try {
         const res = await fetch(
-          `https://eventapi.snapgrab.in/api/activity/stats?EventID=${eventId}`
+          `${config.apiUrl}/activity/stats?EventID=${eventId}`
         );
         const result = await res.json();
 
