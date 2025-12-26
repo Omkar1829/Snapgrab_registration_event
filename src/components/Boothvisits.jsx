@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Calendar, Users, Ticket } from "lucide-react";
+import { Calendar, Users, Ticket, } from "lucide-react";
 import {jwtDecode} from "jwt-decode";
 import { CSVLink } from "react-csv";
 import Header from "./Header";
@@ -51,7 +51,7 @@ const Boothvisits = () => {
 
     try {
       const res = await fetch(
-        `https://eventapi.snapgrab.in/api/activity/users?eventID=${eventId}&activityid=${activity.activityId}`
+        `${config.apiUrl}/activity/users?eventID=${eventId}&activityid=${activity.activityId}`
       );
       const result = await res.json();
 
@@ -78,7 +78,7 @@ const Boothvisits = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
           {activities.map((activity) => {
             const Icon =
               iconMap[activity.activityType] || iconMap.DEFAULT;

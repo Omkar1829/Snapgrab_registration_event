@@ -119,7 +119,7 @@ const EventDashboard = () => {
                     ))}
                 </div>
 
-                <div className='w-full flex items-center justify-evenly'>
+                <div className='w-full flex flex-col md:flex-row items-center justify-evenly'>
                     <ChartExample />
                     <ChartExample />
                 </div>
