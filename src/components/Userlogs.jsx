@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
-import config from "./config";
+import config from "../config/config";
 import { jwtDecode } from "jwt-decode";
 import { Mail, Pencil, Phone } from "lucide-react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'

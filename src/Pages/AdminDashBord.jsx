@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, X, Trash2, Eye, EyeOff, Power } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import config from "../Components/config";
+import config from "../config/config";
 
 export default function AdminDashboard() {
   const [showModal, setShowModal] = useState(false);

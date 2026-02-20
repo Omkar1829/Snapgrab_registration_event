@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowLeft, Pencil, X, Trash2 ,Eye, EyeOff, MessageCircle, MessageCircleMore , Mail} from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import config from "../Components/config";
+import config from "../config/config";
 const AVAILABLE_FIELDS = [
   { id: 1, fieldKey: "Name", label: "Full Name", type: "text", required: true },
   { id: 2, fieldKey: "Email", label: "Email Address", type: "email" },

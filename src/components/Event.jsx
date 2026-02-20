@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 import jsQR from "jsqr";
 import axios from "axios";
-import config from "./config";
+import config from "../config/config";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useLocation } from "react-router-dom";
 import Lottie from "lottie-react";

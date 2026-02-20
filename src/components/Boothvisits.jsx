@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Calendar, Users, Ticket, } from "lucide-react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { CSVLink } from "react-csv";
 import Header from "./Header";
-import config from "./config";
+import config from "../config/config";
 
 const iconMap = {
   VIP: Ticket,

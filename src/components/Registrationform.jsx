@@ -3,7 +3,7 @@ import Header from "./Header";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import config from "./config";
+import config from "../config/config";
 import { jwtDecode } from "jwt-decode";
 import Lottie from "lottie-react";
 import successAnimation from "../assets/lottie/success.json";

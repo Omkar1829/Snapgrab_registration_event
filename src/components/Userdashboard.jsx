@@ -15,7 +15,7 @@ import {
 import Header from './Header'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
-import config from '../Components/config'
+import config from '../config/config'
 
 ModuleRegistry.registerModules([LegendModule, PieSeriesModule])
 
@@ -213,3 +213,4 @@ const EventDashboard = () => {
 }
 
 export default EventDashboard
+                                                             
