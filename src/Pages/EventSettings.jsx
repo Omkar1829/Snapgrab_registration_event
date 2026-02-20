@@ -160,7 +160,7 @@ const EventSettings = () => {
   const handleDeleteBooth = async (Id) => {
     try {
       await axios.delete(`${config.apiUrl}/activity/${Id}`);
-      setBooths((prev) => prev.filter((b) => b.Id !== Id));
+      setBooths((prev) => prev.filter((b) => b.ID !== Id));
     } catch (err) {
       console.error("Delete failed", err);
     }
