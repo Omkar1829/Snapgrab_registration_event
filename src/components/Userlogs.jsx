@@ -199,6 +199,8 @@ const Userlogs = () => {
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-slate-600">
               <tr>
+                <th className="p-4 text-center">Event ID</th>
+                <th className="p-4 text-center">User ID</th>
                 <th className="p-4 text-center">EmpID</th>
                 <th className="p-4 text-center">Name</th>
                 <th className="p-4 text-center">Email</th>
@@ -234,6 +236,8 @@ const Userlogs = () => {
                   key={u.EmpID}
                   className="border-t hover:bg-slate-50 transition"
                 >
+                  <td className="p-4 text-center">{u.EventID}</td>
+                  <td className="p-4 text-center">{u.ID}</td>
                   <td className="p-4 font-medium text-center">{u.EmpID}</td>
                   <td className="p-4 text-center">{u.Name}</td>
                   <td className="p-4 text-center">{u.Email}</td>

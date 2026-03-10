@@ -15,7 +15,7 @@ export default function AdminDashboard() {
   const [eventData, setEventData] = useState({
     CreatedON: new Date().toISOString(),
     Name: "",
-    Id: "",
+    EventId: "",
     Password: "",
     Location: "",
     Role: "Admin",
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, } = e.target;
 
     setEventData((prev) => ({
       ...prev,
@@ -52,7 +52,7 @@ export default function AdminDashboard() {
 
     const payload = {
       Name: eventData.Name,
-      EventId: eventData.Id,
+      EventId: eventData.EventId,
       Password: eventData.Password,
       Location: eventData.Location,
       Role: eventData.Role,
@@ -67,21 +67,36 @@ export default function AdminDashboard() {
       setEventData({
         CreatedON: new Date().toISOString(),
         Name: "",
-        Id: "",
+        EventId: "",
         Password: "",
         Location: "",
         Role: "admin",
       });
 
     } catch (err) {
+
       console.error("Create event failed:", err);
     }
   };
 
+  const fetchEventId = async () => {
+  try {
+    const res = await axios.get(`${config.apiUrl}/events/generateEventId`);
+
+    setEventData((prev) => ({
+      ...prev,
+      EventId: res.data.EventId,
+    }));
+
+  } catch (error) {
+    console.error("Error generating EventId:", error);
+  }
+};
 
   const fetchEvents = async () => {
     try {
       const res = await axios.get(`${config.apiUrl}/events`);
+      console.log("Response Data:", res.data);
       setEvents(res.data);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -116,7 +131,7 @@ export default function AdminDashboard() {
             <div className="flex items-center gap-4">
 
               <button
-                onClick={() => setShowModal(true)}
+                onClick={() =>{fetchEventId(); setShowModal(true)}}
                 className="flex items-center gap-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 font-medium hover:shadow-lg"
               >
                 <Plus size={20} />
@@ -237,8 +252,8 @@ export default function AdminDashboard() {
                     </label>
                     <input
                       type="text"
-                      name="Id"
-                      value={eventData.Id}
+                      name="EventId"
+                      value={eventData.EventId}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       placeholder="Enter event ID"

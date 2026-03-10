@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, Pencil, X, Trash2 ,Eye, EyeOff, MessageCircle, MessageCircleMore , Mail} from "lucide-react";
+import { ArrowLeft, Pencil, X, Trash2, Eye, EyeOff, MessageCircle, MessageCircleMore, Mail } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import config from "../config/config";
@@ -59,8 +59,8 @@ const EventSettings = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-   const [showPassword, setShowPassword] = useState(false);
-  
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleEditClick = () => {
     setTempEventInfo({
@@ -310,56 +310,56 @@ const EventSettings = () => {
                 ))}
               </div>
             </div>
-          
-<div className="flex gap-4">
 
-  
-  <div className="flex-1 bg-white rounded-xl shadow-md border border-gray-100 p-4">
-    <div className="flex justify-center mb-4">
-      <div className="w-12 h-12 rounded-2xl bg-green-500 flex items-center justify-center text-white">
-        <MessageCircleMore size={28} />
-      </div>
-    </div>
+            <div className="flex gap-4">
 
-    <p className="text-center text-sm text-gray-500">
-      Total Users
-    </p>
-    <p className="text-center text-lg font-semibold text-gray-900">
-      1250
-    </p>
 
-    <p className="mt-2 text-center text-sm text-gray-500">
-      Send Count
-    </p>
-    <p className="text-center text-xl font-bold text-green-600">
-      980
-    </p>
-  </div>
+              <div className="flex-1 bg-white rounded-xl shadow-md border border-gray-100 p-4">
+                <div className="flex justify-center mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-green-500 flex items-center justify-center text-white">
+                    <MessageCircleMore size={28} />
+                  </div>
+                </div>
 
-  
-  <div className="flex-1 bg-white rounded-xl shadow-md border border-gray-100 p-6">
-    <div className="flex justify-center mb-4">
-      <div className="w-14 h-14 rounded-2xl bg-blue-500 flex items-center justify-center text-white">
-        <Mail size={28} />
-      </div>
-    </div>
+                <p className="text-center text-sm text-gray-500">
+                  Total Users
+                </p>
+                <p className="text-center text-lg font-semibold text-gray-900">
+                  1250
+                </p>
 
-    <p className="text-center text-sm text-gray-500">
-      Total Users
-    </p>
-    <p className="text-center text-lg font-semibold text-gray-900">
-      980
-    </p>
+                <p className="mt-2 text-center text-sm text-gray-500">
+                  Send Count
+                </p>
+                <p className="text-center text-xl font-bold text-green-600">
+                  980
+                </p>
+              </div>
 
-    <p className="mt-2 text-center text-sm text-gray-500">
-      Send Count
-    </p>
-    <p className="text-center text-xl font-bold text-blue-600">
-      720
-    </p>
-  </div>
 
-</div>
+              <div className="flex-1 bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                <div className="flex justify-center mb-4">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-500 flex items-center justify-center text-white">
+                    <Mail size={28} />
+                  </div>
+                </div>
+
+                <p className="text-center text-sm text-gray-500">
+                  Total Users
+                </p>
+                <p className="text-center text-lg font-semibold text-gray-900">
+                  980
+                </p>
+
+                <p className="mt-2 text-center text-sm text-gray-500">
+                  Send Count
+                </p>
+                <p className="text-center text-xl font-bold text-blue-600">
+                  720
+                </p>
+              </div>
+
+            </div>
 
 
 
@@ -492,34 +492,34 @@ const EventSettings = () => {
                 />
               </div>
 
-             <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Event Password
-  </label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Event Password
+                </label>
 
-  <div className="relative">
-    <input
-      type={showPassword ? "text" : "password"}
-      name="Password"
-       value={tempEventInfo.Password}
-      onChange={handleInputChange}
-      className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      placeholder="Enter event password"
-    />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="eventPassword"
+                    value={tempEventInfo.Password}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Enter event password"
+                  />
 
-    <button
-      type="button"
-      onClick={() => setShowPassword(!showPassword)}
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-    >
-      {showPassword ? (
-         <Eye size={20} />  
-      ) : (
-       <EyeOff size={20} />  
-      )}
-    </button>
-  </div>
-</div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? (
+                      <Eye size={20} />
+                    ) : (
+                      <EyeOff size={20} />
+                    )}
+                  </button>
+                </div>
+              </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Event Location
@@ -621,7 +621,7 @@ const EventSettings = () => {
         </div>
       )}
 
-      
+
       {showUploadModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
@@ -654,11 +654,10 @@ const EventSettings = () => {
                     setSelectedFile(e.dataTransfer.files[0]);
                   }
                 }}
-                className={`relative border-2 border-dashed rounded-xl p-8 transition-all text-center ${
-                  dragActive
+                className={`relative border-2 border-dashed rounded-xl p-8 transition-all text-center ${dragActive
                     ? "border-indigo-500 bg-indigo-50"
                     : "border-gray-300 hover:border-indigo-400"
-                } ${selectedFile ? "bg-green-50 border-green-400" : ""}`}
+                  } ${selectedFile ? "bg-green-50 border-green-400" : ""}`}
               >
                 <input
                   type="file"
@@ -729,7 +728,7 @@ const EventSettings = () => {
             </div>
 
             <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end items-center gap-3">
-              
+
               <button
                 onClick={handleDownloadTemplate}
                 className="flex items-center gap-2 px-4 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors text-sm font-semibold mr-auto"
@@ -763,11 +762,10 @@ const EventSettings = () => {
               <button
                 disabled={!selectedFile}
                 onClick={handleCSVUpload}
-                className={`px-6 py-2 rounded-lg font-semibold transition-all shadow-md ${
-                  selectedFile
+                className={`px-6 py-2 rounded-lg font-semibold transition-all shadow-md ${selectedFile
                     ? "bg-indigo-600 text-white hover:bg-indigo-700"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+                  }`}
               >
                 Upload Now
               </button>

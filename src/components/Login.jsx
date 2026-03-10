@@ -99,8 +99,6 @@ const Login = ({ setToken }) => {
                         <div id="message" className="hidden rounded-lg p-3 text-center text-sm font-medium"></div>
                     </form>
                 </div>
-
-
             </div>
 
         </>
