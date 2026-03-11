@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -25,6 +25,19 @@ const Registrationform = () => {
   /* ================= GET EVENT ID FROM TOKEN ================= */
   const token = localStorage.getItem("token");
   const eventId = token ? jwtDecode(token)?.EventId : "";
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`${config.apiUrl}/qrregistration/generateUserid`)
+      .then((res) => {
+        setUserId(res.data.UserID);
+        formik.setFieldValue("userId", res.data.UserID);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+
 
   /* ================= FORMIK ================= */
   const formik = useFormik({
@@ -33,6 +46,7 @@ const Registrationform = () => {
       email: "",
       employeeId: "",
       eventId: eventId,
+      userId: "",
       type: "standard",
     },
     validationSchema,
@@ -45,6 +59,7 @@ const Registrationform = () => {
         await axios.post(
           `${config.apiUrl}/qrregistration/register`,
           {
+            UserID: values.userId,
             name: values.firstName,
             email: values.email,
             empid: values.employeeId,
@@ -73,6 +88,7 @@ const Registrationform = () => {
             email: "",
             employeeId: "",
             eventId: eventId,
+            userId: userId,
             type: "standard",
           },
         });
@@ -136,7 +152,10 @@ const Registrationform = () => {
                   </p>
                 )}
               </div>
+            </div>
 
+            {/* ================= GRID 2 ================= */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               {/* EMPLOYEE ID */}
               <div>
                 <label className="text-sm font-medium text-slate-700">
@@ -147,6 +166,19 @@ const Registrationform = () => {
                   value={values.employeeId}
                   onChange={handleChange}
                   className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-400"
+                />
+              </div>
+
+              {/* User ID */}
+              <div>
+                <label className="text-sm font-medium text-slate-700">
+                  User ID
+                </label>
+                <input
+                  name="userId"
+                  value={values.userId}
+                  readOnly
+                  className="mt-1 w-full px-3 py-2 border rounded-lg bg-slate-100 text-slate-600"
                 />
               </div>
 

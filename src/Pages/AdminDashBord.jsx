@@ -127,6 +127,17 @@ export default function AdminDashboard() {
               AdminDashboard
             </h1>
 
+             {/* <div className="flex items-center">
+
+              <button
+                onClick={""}
+                className="flex items-center gap-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 font-medium hover:shadow-lg"
+              >
+                <Plus size={20} />
+                <span className="hidden sm:block">Create New Role</span>
+              </button>
+            </div> */}
+
 
             <div className="flex items-center gap-4">
 

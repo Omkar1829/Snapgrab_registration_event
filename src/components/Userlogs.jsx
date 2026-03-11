@@ -39,6 +39,7 @@ const Userlogs = () => {
   const formik = useFormik({
     initialValues: {
       ID: selectedUser?.ID,
+      UserID: selectedUser?.UserID,
       firstName: selectedUser?.Name,
       email: selectedUser?.Email,
       employeeId: selectedUser?.EmpID,
@@ -54,9 +55,10 @@ const Userlogs = () => {
         setErrorMsg("");
 
         await axios.post(
-          `${config.apiUrl}/qrregistration/updatetype`,
+          `${config.apiUrl}/qrregistration/updatetype/`,
           {
             ID: values.ID,
+            UserID: values.UserID,
             name: values.firstName,
             email: values.email,
             empid: values.employeeId,
@@ -90,6 +92,7 @@ const Userlogs = () => {
             firstName: "",
             email: "",
             employeeId: "",
+            UserID: "",
             eventId: eventId,
             type: "standard",
           },
@@ -112,6 +115,7 @@ const Userlogs = () => {
         values: {
           firstName: selectedUser.Name || "",
           ID: selectedUser.ID,
+          UserID: selectedUser.UserID,
           email: selectedUser.Email || "",
           employeeId: selectedUser.EmpID || "",
           eventId: selectedUser.EventID || "",
@@ -237,7 +241,7 @@ const Userlogs = () => {
                   className="border-t hover:bg-slate-50 transition"
                 >
                   <td className="p-4 text-center">{u.EventID}</td>
-                  <td className="p-4 text-center">{u.ID}</td>
+                  <td className="p-4 text-center">{u.UserID}</td>
                   <td className="p-4 font-medium text-center">{u.EmpID}</td>
                   <td className="p-4 text-center">{u.Name}</td>
                   <td className="p-4 text-center">{u.Email}</td>
