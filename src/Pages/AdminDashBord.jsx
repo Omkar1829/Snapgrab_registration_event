@@ -9,7 +9,7 @@ export default function AdminDashboard() {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
+  const [adminEventId, setAdminEventId] = useState("");
 
 
   const [eventData, setEventData] = useState({
@@ -18,7 +18,7 @@ export default function AdminDashboard() {
     EventId: "",
     Password: "",
     Location: "",
-    Role: "Admin",
+    Role: "admin",
   });
 
   const handleDelete = async (e, event) => {
@@ -38,13 +38,51 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, } = e.target;
+  // const handleInputChange = (e) => {
+  //   const { name, value, } = e.target;
 
-    setEventData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  //   setEventData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+
+  const handleInputChange = async (e) => {
+    const { name, value } = e.target;
+
+    if (name === "Role") {
+
+      if (value === "admin") {
+
+        // Generate new EventID
+        const res = await axios.get(`${config.apiUrl}/events/generateEventId`);
+
+        setEventData(prev => ({
+          ...prev,
+          Role: value,
+          EventId: res.data.EventId
+        }));
+
+      } else {
+
+        // Get last admin EventID
+        const res = await axios.get(`${config.apiUrl}/events/lastAdminEventId`);
+
+        setEventData(prev => ({
+          ...prev,
+          Role: value,
+          EventId: res.data.EventId
+        }));
+      }
+
+    } else {
+
+      setEventData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+
+    }
   };
 
   const handleSubmit = async () => {
@@ -80,18 +118,18 @@ export default function AdminDashboard() {
   };
 
   const fetchEventId = async () => {
-  try {
-    const res = await axios.get(`${config.apiUrl}/events/generateEventId`);
+    try {
+      const res = await axios.get(`${config.apiUrl}/events/generateEventId`);
 
-    setEventData((prev) => ({
-      ...prev,
-      EventId: res.data.EventId,
-    }));
+      setEventData((prev) => ({
+        ...prev,
+        EventId: res.data.EventId,
+      }));
 
-  } catch (error) {
-    console.error("Error generating EventId:", error);
-  }
-};
+    } catch (error) {
+      console.error("Error generating EventId:", error);
+    }
+  };
 
   const fetchEvents = async () => {
     try {
@@ -127,36 +165,37 @@ export default function AdminDashboard() {
               AdminDashboard
             </h1>
 
-             {/* <div className="flex items-center">
+            <div className="flex gap-8">
+              {/* <div className="flex items-center">
 
-              <button
-                onClick={""}
-                className="flex items-center gap-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 font-medium hover:shadow-lg"
-              >
-                <Plus size={20} />
-                <span className="hidden sm:block">Create New Role</span>
-              </button>
-            </div> */}
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="flex items-center gap-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 font-medium hover:shadow-lg"
+                >
+                  <Plus size={20} />
+                  <span className="hidden sm:block">Create New Role</span>b`
+                </button>
+              </div> */}
 
+              <div className="flex items-center gap-4">
 
-            <div className="flex items-center gap-4">
+                <button
+                  onClick={() => { fetchEventId(); setShowModal(true) }}
+                  className="flex items-center gap-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 font-medium hover:shadow-lg"
+                >
+                  <Plus size={20} />
+                  <span className="hidden sm:block">Create New Event</span>
+                </button>
 
-              <button
-                onClick={() =>{fetchEventId(); setShowModal(true)}}
-                className="flex items-center gap-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 font-medium hover:shadow-lg"
-              >
-                <Plus size={20} />
-                <span className="hidden sm:block">Create New Event</span>
-              </button>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-full hover:bg-red-50 transition"
+                  title="Logout"
+                >
+                  <Power className="text-red-500" size={22} />
+                </button>
 
-              <button
-                onClick={handleLogout}
-                className="p-2 rounded-full hover:bg-red-50 transition"
-                title="Logout"
-              >
-                <Power className="text-red-500" size={22} />
-              </button>
-
+              </div>
             </div>
           </div>
         </div>

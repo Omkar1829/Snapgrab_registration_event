@@ -158,7 +158,10 @@ const Userlogs = () => {
       });
 
       const data = res.data.data;
-      setUsers(data.items || []);
+      const sortedUsers = (data.items || []).sort((a, b) =>
+        b.UserID.localeCompare(a.UserID)
+      );
+      setUsers(sortedUsers);
       setPageCount(data.pageCount || 0);
       setTotalCount(data.totalCount || 0);
     } catch (err) {

@@ -27,16 +27,29 @@ const Registrationform = () => {
   const eventId = token ? jwtDecode(token)?.EventId : "";
   const [userId, setUserId] = useState("");
 
-  useEffect(() => {
+  const generateUserId = () => {
     axios
-      .get(`${config.apiUrl}/qrregistration/generateUserid`)
+      .get(`${config.apiUrl}/qrregistration/generateUserid?EventID=${eventId}`)
       .then((res) => {
         setUserId(res.data.UserID);
         formik.setFieldValue("userId", res.data.UserID);
       })
       .catch((err) => console.error(err));
+  };
+  
+  useEffect(() => {
+    generateUserId();
   }, []);
 
+  // useEffect(() => {
+  //   axios
+  //     .get(`${config.apiUrl}/qrregistration/generateUserid`)
+  //     .then((res) => {
+  //       setUserId(res.data.UserID);
+  //       formik.setFieldValue("userId", res.data.UserID);
+  //     })
+  //     .catch((err) => console.error(err));
+  // }, []);
 
 
   /* ================= FORMIK ================= */
@@ -74,6 +87,9 @@ const Registrationform = () => {
           }
         );
 
+        // ✅ generate next UserID
+        await generateUserId();
+
         // ✅ Show Lottie success popup
         setShowSuccessPopup(true);
 
@@ -94,7 +110,12 @@ const Registrationform = () => {
         });
       } catch (error) {
         console.error(error);
-        setErrorMsg("Registration failed. Please try again.");
+
+        if (error.response && error.response.data && error.response.data.message) {
+          setErrorMsg(error.response.data.message);
+        } else {
+          setErrorMsg("Registration failed. Please try again.");
+        }
       } finally {
         setDisableBtn(false);
       }
@@ -143,7 +164,10 @@ const Registrationform = () => {
                 <input
                   name="email"
                   value={values.email}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setErrorMsg("");
+                  }}
                   className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-400"
                 />
                 {touched.email && errors.email && (
@@ -164,7 +188,10 @@ const Registrationform = () => {
                 <input
                   name="employeeId"
                   value={values.employeeId}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setErrorMsg("");
+                  }}
                   className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-400"
                 />
               </div>
