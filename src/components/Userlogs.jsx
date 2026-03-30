@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { Mail, Pencil, Phone } from "lucide-react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useFormik } from "formik";
-import * as Yup from "yup";
+
 
 const PAGE_SIZE = 20;
 
@@ -189,7 +189,7 @@ const Userlogs = () => {
 
         {/* ================= HEADER ================= */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-          <h1 className="text-2xl font-semibold text-slate-800">
+          <h1 className="text-2xl mb-4 font-semibold text-slate-800">
             User Logs
           </h1>
 
@@ -200,6 +200,8 @@ const Userlogs = () => {
             className="w-full md:w-80 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 bg-white focus:ring-slate-400"
           />
         </div>
+
+
 
         {/* ================= TABLE ================= */}
         <div className="bg-white rounded-xl shadow overflow-x-auto">

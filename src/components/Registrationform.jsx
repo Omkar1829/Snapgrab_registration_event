@@ -12,7 +12,7 @@ import successAnimation from "../assets/lottie/success.json";
 const validationSchema = Yup.object({
   firstName: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  employeeId: Yup.string(),
+  employeeId: Yup.string().required("Employee ID is required"),
   eventId: Yup.string().required("Event ID is required"),
   type: Yup.string().required("Type is required"),
 });
@@ -36,7 +36,7 @@ const Registrationform = () => {
       })
       .catch((err) => console.error(err));
   };
-  
+
   useEffect(() => {
     generateUserId();
   }, []);
@@ -194,7 +194,12 @@ const Registrationform = () => {
                   }}
                   className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-400"
                 />
-              </div>
+                {touched.employeeId && errors.employeeId && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.employeeId}
+                  </p>
+                )}
+              </div>                                                         
 
               {/* User ID */}
               <div>

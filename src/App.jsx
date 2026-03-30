@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Userdashboard from './components/Userdashboard'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Event from './components/Event.jsx'
-
 import EventSettings from './Pages/EventSettings.jsx';
 import AdminDashboard from './Pages/AdminDashBord.jsx';
 import Registrationform from './components/Registrationform.jsx';
@@ -11,6 +10,7 @@ import Login from './components/Login.jsx';
 import Boothvisits from './components/Boothvisits.jsx';
 import { jwtDecode } from "jwt-decode";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import Scanners from './components/Subcomponents/Scanners.jsx';
 
 const App = () => {
 
@@ -86,7 +86,7 @@ const App = () => {
             <Route path="/" element={<Login setToken={setToken} />} />
           </Route>
 
-          <Route element={<ProtectedRoute allowedRoles={["admin","checkin"]} />}>
+          <Route element={<ProtectedRoute allowedRoles={["admin","checkin",]} />}>
             <Route path="/cam" element={<Event />} />
             <Route path='*' element={<Boothvisits />} />
           </Route>
@@ -102,6 +102,7 @@ const App = () => {
             <Route path='/form' element={<Registrationform />} />
             <Route path="/Booth" element={<Boothvisits />} />
             <Route path="/User" element={<Userlogs />} />
+            <Route path="/Scan" element={<Scanners />} />
           </Route>
 
           {/* ----------------Admin Routes---------------- */}

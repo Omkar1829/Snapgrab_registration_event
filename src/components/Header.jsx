@@ -2,14 +2,13 @@ import React from 'react'
 import { Users, UserCheck, Store, Clock, TrendingUp, MapPin, Calendar, Download, Camera, LogOut } from 'lucide-react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-
-
+import Scanners from './Subcomponents/Scanners'
 
 const Header = () => {
 
-    const { Role} = jwtDecode(localStorage.getItem("token"));
+    const { Role } = jwtDecode(localStorage.getItem("token"));
 
     const handleLogout = () => {
         const enterpassword = window.prompt("Please enter password to continue")
@@ -27,7 +26,7 @@ const Header = () => {
 
     const MenuMap = {
         admin: [
-            { name: 'Dashboard', path: '/dashboard'},
+            { name: 'Dashboard', path: '/dashboard' },
             { name: 'Camera', path: '/cam' },
             { name: 'Booth Visits', path: '/Booth' },
             { name: 'Registered Users', path: '/User' },
@@ -47,10 +46,14 @@ const Header = () => {
 
     const [openSidebar, setOpenSidebar] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     return (
         <header className="bg-white border-b border-slate-200 shadow-sm">
-            <div className="w-full mx-auto px-6 py-4 flex justify-between">
+            <div
+                className={`w-full mx-auto px-3 md:px-6 gap-1 md:gap-2 flex justify-between ${location.pathname === "/User" ? "py-0" : "py-4"
+                    }`}
+            >
                 <div className="flex items-center gap-3">
                     <div
                         className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center cursor-pointer"
@@ -97,20 +100,18 @@ const Header = () => {
                         </h1>
                         {/* <p className="text-sm text-slate-500">Admin Dashboard</p> */}
                     </div>
+
+
                 </div>
 
-                {/* <div className='flex items-center gap-4'>
-                        <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium border-none cursor-pointer flex items-center gap-2 hover:bg-indigo-700 transition-colors">
-                            <Store className="w-4 h-4" />
-                            Booth Visits
-                        </button>
-                        <button className='cursor-pointer' >
-                            <Camera />
-                        </button>
-                        <button className='cursor-pointer'>
-                            <LogOut />
-                        </button>
-                    </div> */}
+                <div className="flex items-center gap-4 mt-4">
+
+                    {/* ✅ Show ONLY on /User */}
+                    {location.pathname === "/User" && (
+                        <Scanners />
+                    )}
+
+                </div>
             </div>
         </header>
     )

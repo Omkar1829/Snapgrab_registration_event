@@ -24,15 +24,21 @@ export default function AdminDashboard() {
   const handleDelete = async (e, event) => {
     e.stopPropagation();
 
+    if (!window.confirm("Are you sure you want to delete this event?")) return;
+
     if (!event.ID) {
       console.error("Event ID missing", event);
       return;
     }
 
     try {
-      await axios.delete(`${config.apiUrl}/events/${event.ID}`);
+      await axios.put(`${config.apiUrl}/events/${event.ID}`, {
+        isDeleted: true,
+      });
 
+      // remove from UI instantly
       setEvents((prev) => prev.filter((item) => item.ID !== event.ID));
+
     } catch (err) {
       console.error("Delete event failed:", err);
     }

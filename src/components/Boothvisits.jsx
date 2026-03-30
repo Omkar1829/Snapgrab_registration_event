@@ -143,7 +143,7 @@ const Boothvisits = () => {
                     Download CSV
                   </CSVLink>
 
-                  <div className="overflow-x-auto">
+                  <div className="overflow-auto max-h-[400px] border">
                     <table className="min-w-full border text-sm">
                       <thead className="bg-gray-100 text-gray-700 uppercase">
                         <tr>
