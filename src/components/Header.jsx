@@ -51,8 +51,7 @@ const Header = () => {
     return (
         <header className="bg-white border-b border-slate-200 shadow-sm">
             <div
-                className={`w-full mx-auto px-3 md:px-6 gap-1 md:gap-2 flex justify-between ${location.pathname === "/User" ? "py-0" : "py-4"
-                    }`}
+                className='w-full h-16 px-3 md:px-6 gap-1 md:gap-2 flex justify-between '
             >
                 <div className="flex items-center gap-3">
                     <div
