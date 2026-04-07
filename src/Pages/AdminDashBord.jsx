@@ -120,6 +120,12 @@ export default function AdminDashboard() {
     } catch (err) {
 
       console.error("Create event failed:", err);
+
+      if (err.response && err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Something went wrong");
+      }
     }
   };
 

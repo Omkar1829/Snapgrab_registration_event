@@ -31,6 +31,9 @@
     /* QR container */
     .qr-wrapper {
         text-align: center;
+        /* border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        padding: 40px 0 */
     }
 
     /* ✅ QR SIZE (adjust safely) */

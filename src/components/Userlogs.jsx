@@ -511,7 +511,7 @@ const Userlogs = () => {
               </>
             )}
             <div className="print-area">
-              <div className="flex flex-col items-center gap-3">
+              <div className="qr-wrapper flex flex-col items-center gap-3">
                 <img
                   src={`${config.apiUrl}/qr/EmpID/${selectedEmpID}`}
                   alt="QR"
