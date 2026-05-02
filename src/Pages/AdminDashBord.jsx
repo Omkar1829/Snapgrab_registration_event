@@ -19,7 +19,7 @@ export default function AdminDashboard() {
     Password: "",
     Location: "",
     Role: "admin",
-  });
+  }); 
 
   const handleDelete = async (e, event) => {
     e.stopPropagation();
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
       console.error("Event ID missing", event);
       return;
     }
-
+  
     try {
       await axios.put(`${config.apiUrl}/events/${event.ID}`, {
         isDeleted: true,

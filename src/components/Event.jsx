@@ -365,7 +365,7 @@ const Event = () => {
             {showScanModal && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
                     <div className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-xl">
-                        <span className="bg-gray-700 rounded-full shadow-2xl shadow-gray-500 cursor-pointer py-4 px-5 text-white"
+                        <span className="bg-gray-700 rounded-full shadow-2xl shadow-gray-500 cursor-pointer py-2 px-4 text-white"
                         onClick={() => {
                             setShowScanModal(false);
                             setCameraActive(true);
