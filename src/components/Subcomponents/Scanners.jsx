@@ -89,6 +89,7 @@ const Scanners = () => {
         let stream;
         let lastScanTime = 0;
         let phoneStore = [];
+        let animationId;
 
         navigator.mediaDevices
             .getUserMedia({ video: { facingMode } })
@@ -118,7 +119,7 @@ const Scanners = () => {
                         canvas.height = video.videoHeight;
 
                         if (!canvas.width || !canvas.height) {
-                            requestAnimationFrame(scanQRCode);
+                            animationId = requestAnimationFrame(scanQRCode);
                             return;
                         }
 
@@ -150,7 +151,7 @@ const Scanners = () => {
                             }
                         }
 
-                        requestAnimationFrame(scanQRCode);
+                        animationId = requestAnimationFrame(scanQRCode);
                     };
 
                     scanQRCode();
@@ -159,6 +160,7 @@ const Scanners = () => {
             .catch(console.error);
 
         return () => {
+            cancelAnimationFrame(animationId);
             // ensure torch is off when stopping
             if (trackRef.current && flashOn) {
                 trackRef.current.applyConstraints?.({ advanced: [{ torch: false }] }).catch(() => { });
@@ -168,7 +170,7 @@ const Scanners = () => {
             setFlashOn(false);
             setHasFlash(false);
         };
-    }, [selectedBooth, facingMode, cameraActive, eventId, showScanModal]);
+    }, [selectedBooth, facingMode, cameraActive, eventId]);
 
     /* ================= HANDLE SCAN ================= */
     const handleScan = async (empId) => {
@@ -255,7 +257,7 @@ const Scanners = () => {
 
             {/* ================= BOOTH SELECTION ================= */}
             {!selectedBooth && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 cursor-pointer">
                     {activities.map((activity, index) => {
                         const style =
                             boothCardStyles[index % boothCardStyles.length];

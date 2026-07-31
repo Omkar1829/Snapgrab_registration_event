@@ -264,13 +264,13 @@ const Userlogs = () => {
                   {Role === 'admin' ? (
                     <>
                       <td className="p-4 text-center">
-                        <button className="px-3 py-1.5 border bg-red-100 text-red-700 font-medium rounded-lg hover:bg-slate-100">
+                        <button className="cursor-pointer px-3 py-1.5 border bg-red-100 text-red-700 font-medium rounded-lg hover:bg-slate-100">
                           {/* <Mail size={16} /> */}
                           Email
                         </button>
                       </td>
                       <td className="p-4 text-center">
-                        <button className="px-3 py-1.5 border rounded-lg bg-green-100 text-green-700 font-medium hover:bg-slate-100">
+                        <button className="cursor-pointer px-3 py-1.5 border rounded-lg bg-green-100 text-green-700 font-medium hover:bg-slate-100">
                           {/* <Phone size={16} /> */}
                           Whatsapp
                         </button>
@@ -279,7 +279,7 @@ const Userlogs = () => {
                         <button onClick={() => {
                           setSelectedUser(u)
                           setOpen(true)
-                        }} className="px-3 py-1.5 border rounded-lg bg-blue-100 text-blue-700 font-medium hover:bg-slate-100">
+                        }} className="cursor-pointer px-3 py-1.5 border rounded-lg bg-blue-100 text-blue-700 font-medium hover:bg-slate-100">
                           {/* <Pencil size={16} /> */}
                           Edit
                         </button>
@@ -314,7 +314,7 @@ const Userlogs = () => {
                                                 value={values.ID}
                                                 readOnly
                                                 onChange={handleChange}
-                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 bg-slate-100 focus:ring-slate-400"
+                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 bg-slate-100 focus:ring-slate-400 cursor-not-allowed"
                                               />
                                               {touched.ID && errors.ID && (
                                                 <p className="text-xs text-red-500 mt-1">
@@ -329,8 +329,9 @@ const Userlogs = () => {
                                               <input
                                                 name="firstName"
                                                 value={values.firstName}
+                                                readOnly
                                                 onChange={handleChange}
-                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-400"
+                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 bg-slate-100 focus:ring-slate-400 cursor-not-allowed"
                                               />
                                               {touched.firstName && errors.firstName && (
                                                 <p className="text-xs text-red-500 mt-1">
@@ -347,8 +348,9 @@ const Userlogs = () => {
                                               <input
                                                 name="email"
                                                 value={values.email}
+                                                readOnly
                                                 onChange={handleChange}
-                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-400"
+                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 bg-slate-100 focus:ring-slate-400 cursor-not-allowed"
                                               />
                                               {touched.email && errors.email && (
                                                 <p className="text-xs text-red-500 mt-1">
@@ -365,8 +367,9 @@ const Userlogs = () => {
                                               <input
                                                 name="employeeId"
                                                 value={values.employeeId}
+                                                readOnly
                                                 onChange={handleChange}
-                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-400"
+                                                className="mt-1 w-full px-3 py-2 border rounded-lg focus:ring-2 bg-slate-100 focus:ring-slate-400 cursor-not-allowed"
                                               />
                                             </div>
 
@@ -379,7 +382,7 @@ const Userlogs = () => {
                                                 name="eventId"
                                                 value={values.eventId}
                                                 readOnly
-                                                className="mt-1 w-full px-3 py-2 border rounded-lg bg-slate-100 text-slate-600"
+                                                className="mt-1 w-full px-3 py-2 border rounded-lg bg-slate-100 text-slate-600 cursor-not-allowed"
                                               />
                                             </div>
                                           </div>
@@ -433,14 +436,14 @@ const Userlogs = () => {
                             setSelectedEmpID(u.EmpID);
                             setShowQR(true);
                           }}
-                          className="px-3 py-1.5 border rounded-lg bg-yellow-100 text-yellow-700 font-medium hover:bg-slate-100"
+                          className="cursor-pointer px-3 py-1.5 border rounded-lg bg-yellow-100 text-yellow-700 font-medium hover:bg-slate-100"
                         >
                           Show QR
                         </button>
                       </td>
                     </>
                   ) : (
-                    <td className="p-4 text-center">
+                    <td className="p-4 text-center ">
                       <button
                         onClick={() => {
                           setSelectedEmpID(u.EmpID);
@@ -511,13 +514,13 @@ const Userlogs = () => {
               </>
             )}
             <div className="print-area">
-              <div className="qr-wrapper flex flex-col items-center gap-3">
+              <div className="qr-wrapper flex flex-col items-center">
                 <img
                   src={`${config.apiUrl}/qr/EmpID/${selectedEmpID}`}
                   alt="QR"
-                  className="w-48 h-48"
+                  className="w-48 h-48 qr-image"
                 />
-                <p className="text-sm">
+                <p className="text-sm qr-text">
                   <strong>Employee ID:</strong> {selectedEmpID}
                 </p>
               </div>

@@ -60,6 +60,7 @@ const EventSettings = () => {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
 
   const handleEditClick = () => {
@@ -166,32 +167,99 @@ const EventSettings = () => {
     }
   };
 
+  // const handleCSVUpload = async () => {
+  //   if (!selectedFile) return;
+
+  //   const formData = new FormData();
+  //   formData.append("file", selectedFile);
+
+  //   try {
+  //     await axios.post(
+  //       `${config.apiUrl}/qrregistration/bulk-upload`,
+  //       formData,
+  //       {
+  //         params: {
+  //           EventID: selectedEvent.EventId,
+  //         },
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+
+  //     alert("CSV Uploaded Successfully!");
+  //     setShowUploadModal(false);
+  //     setSelectedFile(null);
+  //   } catch (err) {
+  //     console.error("Upload failed", err);
+  //     alert("Failed to upload CSV. Please check the file format.");
+  //   }
+  // };
+
   const handleCSVUpload = async () => {
+
     if (!selectedFile) return;
 
     const formData = new FormData();
+
     formData.append("file", selectedFile);
 
     try {
-      await axios.post(
+
+      setUploading(true);
+
+      console.log("API URL:",
+        `${config.apiUrl}/qrregistration/bulk-upload`
+      );
+
+      console.log("Selected File:", selectedFile);
+
+      console.log("Event ID:", selectedEvent.EventId);
+
+      const response = await axios.post(
+
         `${config.apiUrl}/qrregistration/bulk-upload`,
+
         formData,
+
         {
           params: {
             EventID: selectedEvent.EventId,
           },
+
           headers: {
             "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      alert("CSV Uploaded Successfully!");
+      console.log("FULL RESPONSE:", response);
+
+      console.log("RESPONSE DATA:", response.data);
+
+      alert(response.data.message);
+
       setShowUploadModal(false);
+
       setSelectedFile(null);
+
     } catch (err) {
-      console.error("Upload failed", err);
-      alert("Failed to upload CSV. Please check the file format.");
+
+      console.error("UPLOAD ERROR:", err);
+
+      console.log("ERROR RESPONSE:", err.response);
+
+      console.log("ERROR DATA:", err.response?.data);
+
+      alert(
+        err.response?.data?.message ||
+        "Failed to upload CSV"
+      );
+
+    } finally {
+
+      setUploading(false);
+
     }
   };
 
@@ -381,7 +449,7 @@ const EventSettings = () => {
             <div className="space-y-2">
               {booths.map((booth) => (
                 <div
-                  key={booth.id}
+                  key={booth.ID}
                   className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200 shadow-lg"
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -433,12 +501,12 @@ const EventSettings = () => {
           <div className="flex gap-2 overflow-x-auto pb-2">
             {booths.map((booth) => (
               <div
-                key={booth.id}
+                key={booth.ID}
                 className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-2 border border-gray-200 shadow-lg flex-shrink-0 min-w-[120px]"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-gray-800 font-semibold text-xs truncate">
-                    {booth.name}
+                    {booth.Name}
                   </span>
                   <button className="text-indigo-600 hover:text-indigo-700 flex-shrink-0">
                     <svg
@@ -655,8 +723,8 @@ const EventSettings = () => {
                   }
                 }}
                 className={`relative border-2 border-dashed rounded-xl p-8 transition-all text-center ${dragActive
-                    ? "border-indigo-500 bg-indigo-50"
-                    : "border-gray-300 hover:border-indigo-400"
+                  ? "border-indigo-500 bg-indigo-50"
+                  : "border-gray-300 hover:border-indigo-400"
                   } ${selectedFile ? "bg-green-50 border-green-400" : ""}`}
               >
                 <input
@@ -760,14 +828,14 @@ const EventSettings = () => {
               </button>
 
               <button
-                disabled={!selectedFile}
+                disabled={!selectedFile || uploading}
                 onClick={handleCSVUpload}
                 className={`px-6 py-2 rounded-lg font-semibold transition-all shadow-md ${selectedFile
-                    ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
               >
-                Upload Now
+                {uploading ? "Uploading..." : "Upload Now"}
               </button>
             </div>
           </div>
